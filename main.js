@@ -1,43 +1,61 @@
 const spans = document.getElementsByTagName("span");
 const cursor = document.getElementById("cursor");
-const isTouchDevice = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+const IS_TOUCH_DEVICE = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+const ANIMATION_RANGE = 200;
 
-let cursorPosX = 0, cursorPosY = 0;
-
-const range = 200;
-let offset = 0, scale = 1;
+let offset_vector = {
+  x: 0,
+  y: 0
+};
+let scale = 1;
 let rect, distance;
 let mouseX, mouseY;
 
-process_touchmove = (touchEvent) => {
-  touchEvent.preventDefault();
-  let touch = touchEvent.targetTouches[0];
+process_touchmove = (touch_event) => {
+  touch_event.preventDefault();
+  let touch = touch_event.targetTouches[0];
   handleMovement(touch);
 }
 
 // Register touch event handlers
 handleMovement = (input) => {
-  cursorPosX = input.clientX*0.1 + cursorPosX*0.9;
-  cursorPosY = input.clientY*0.1 + cursorPosY*0.9;
-  cursor.style.left = cursorPosX + "px";
-  cursor.style.top = cursorPosY + "px";
+  mouseX = input.clientX;
+  mouseY = input.clientY;
+
+  cursor.style.left = mouseX + "px";
+  cursor.style.top = mouseY + "px";
 
   for(letter of spans){
     rect = letter.getBoundingClientRect();
-    distance = dist(cursorPosX, cursorPosY, (rect.left+rect.right)/2, (rect.top+rect.bottom)/2);
+    distance = dist(mouseX, mouseY, (rect.left+rect.right)/2, (rect.top+rect.bottom)/2);
 
-    offset = map(distance, 0, range, -0.5, 0);
-    scale = map(distance, 0, range, 1.1, 1);
+    offset_vector.y = map(distance, 0, ANIMATION_RANGE, -0.5, 0);
+    scale = map(distance, 0, ANIMATION_RANGE, 1.1, 1);
 
-
-    letter.style.transform = "translateY("+ offset +"em) scale("+ scale +")";
+    letter.style.transform = "translateY("+ offset_vector.y +"em) scale("+ scale +")";
   }
 };
 
-if(isTouchDevice){
+window.addEventListener('mousemove', (event) => {
+  cursor.style.display = "block";
+  cursor.style.left = event.clientX + "px";
+  cursor.style.top = event.clientY + "px";
+}, { once: true});
+
+if(IS_TOUCH_DEVICE){
   window.addEventListener('touchmove', process_touchmove, false);
 }
 window.addEventListener('mousemove', handleMovement, false);
+document.addEventListener("mouseleave", (event) => {  
+  if (event.clientY <= 0 || event.clientX <= 0 || (event.clientX >= window.innerWidth || event.clientY >= window.innerHeight)) {  
+    cursor.style.display = "none"; 
+  }  
+});
+document.addEventListener("mouseenter", (event) => {  
+  if (event.clientY >= 0 && event.clientX >= 0 && event.clientX <= window.innerWidth && event.clientY <= window.innerHeight) {  
+    cursor.style.display = "block"; 
+  }  
+});
 
 function dist(x1, y1, x2, y2){
   return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));

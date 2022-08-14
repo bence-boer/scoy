@@ -30,8 +30,6 @@ h1{
   box-sizing: border-box;
   padding-bottom: 0.1em;
   border-bottom: dashed var(--dark-color) 0.1em;
-
-  /*cursor: pointer;*/
 }
 h2{
   margin: 0;
@@ -63,17 +61,18 @@ h2{
 
 #cursor{
   position: fixed;
-  left: 0;
-  top: 0;
+  left: 50vw;
+  top: 50vh;
   transform: translateX(-50%) translateY(-50%);
 
   width: 1vw;
   height: 1vw;
 
   background-color: white;
-  /*mix-blend-mode: soft-light;*/
   border-radius: 50%;
   box-shadow: 0 0 30px 20px white;
+
+  display: none;
 }
 
 .wave span:nth-of-type(1){
@@ -120,52 +119,4 @@ h2{
   100%{
     transform: translateY(0);
   }
-}
-
-
-/*HEADER*/
-header{
-  position: fixed;
-  left: 0;
-  top: 0;
-
-  font-size: 5vh;
-
-  box-sizing: border-box;
-  width: 100vw;
-  height: 3em;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0 1em;
-
-  /*background: var(--dark-color);
-  color: var(--accent-color);*/
-  border-bottom: thin var(--dark-color) solid;
-}
-header:hover #cursor{
-  background-color: black;
-}
-div::selection, h2::selection{
-  background-color: transparent;
-  color: white;
-}
-#logo{
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-}
-#nav-cont{
-  display: flex;
-  flex-direction: row;
-  gap: 1em;
-  align-items: center;
-
-  width: wrap-around;
-  height: 100%;
-}
-.nav-item{
-  font-size: 0.8em;
 }
