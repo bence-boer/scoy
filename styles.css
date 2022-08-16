@@ -1,5 +1,5 @@
 :root{
-  --dark-color: #333333;
+  --dark-color: #333;
   --accent-color: #EDC96B;
 }
 html{
@@ -51,6 +51,7 @@ h2{
   padding: 0;
   display: inline-block;
 
+  transform-origin: bottom right;
   animation: wave 0.8s ease-in-out 1;
 }
 
@@ -111,10 +112,13 @@ h2{
 
 @keyframes wave{
   0%{
-    transform: translateY(0);
+    transform: translateY(0) scaleY(1);
   }
-  50%{
-    transform: translateY(-0.2em) scale(1.1);
+  20%{
+    transform: translateY(0) scaleY(0.8);
+  }
+  60%{
+    transform: translateY(-0.4em) scaleY(1.2);
   }
   100%{
     transform: translateY(0);
